@@ -1,0 +1,1 @@
+Diese Datei dient nur dazu, den Ordner frontend/ committen zu können und kommt daher bald möglich weg.
