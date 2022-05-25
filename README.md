@@ -30,3 +30,7 @@ https://nodejs.org/en/download/
 
 #### Start Angular App
 - `ng serve --open`
+
+
+## REST-API
+Die Endpoints der REST-API werden [hier](/doc/rest-api.md) beschrieben.
