@@ -10,9 +10,6 @@ The following endpoints may be implemented in the future.
 ## Get user profile
 - HTTP-Method: GET
 - URL: `http://{IP-Host}:{port}/rest/profiles/{userID}`
-- Request parameters:
-- Body:
-
 
 ## Update user profile
 - HTTP-Method: PUT
@@ -28,14 +25,10 @@ The following endpoints may be implemented in the future.
 ## Get all inventories of a user
 - HTTP-Method: GET
 - URL: `http://{IP-Host}:{port}/rest/{userID}/inventories/`
-- Request parameters:
-- Body:
 
 ## Get specific inventory of a user
 - HTTP-Method: GET
 - URL: `http://{IP-Host}:{port}/rest/{userID}/inventories/{inventoryID}`
-- Request parameters:
-- Body:
 
 ## Update specific inventory of a user
 - HTTP-Method: PUT
@@ -68,8 +61,6 @@ The following endpoints may be implemented in the future.
 ## Get all items of a inventory
 - HTTP-Method: GET
 - URL: `http://{IP-Host}:{port}/rest/{userID}/inventories/{inventoryID}/items`
-- Request parameters:
-- Body:
 
 ## Sign up
 - HTTP-Method: POST
@@ -84,6 +75,12 @@ The following endpoints may be implemented in the future.
   ```
 - Response:
   ```
+    {
+      email: <email>,
+      expires_in: <expiration-time in seconds>,
+      token: <jwt>,
+      refresh_token: <refresh jwt>
+    }
   ```
 
 ## Sign in
@@ -97,8 +94,14 @@ The following endpoints may be implemented in the future.
   }
   ```
 - Response:
-  ```
-  ```
+    ```
+    {
+      email: <email>,
+      expires_in: <expiration-time in seconds>,
+      token: <jwt>,
+      refresh_token: <refresh jwt>
+    }
+    ```
 
 
 
@@ -108,3 +111,4 @@ The following endpoints may be implemented in the future.
 - URL: `http://{IP-Host}:{port}/rest/foo`
 - Request parameters:
 - Body:
+
