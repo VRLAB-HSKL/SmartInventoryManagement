@@ -9,10 +9,9 @@ Repository für das Masterprojekt
 ### Frontend
 #### Install NodeJS
 #### Linux:
-```
-curl -fsSL https://deb.nodesource.com/setup_16.x | sudo -E bash -
-sudo apt-get install -y nodejs
-```
+- `curl -fsSL https://deb.nodesource.com/setup_16.x | sudo -E bash -`
+- `sudo apt-get install -y nodejs`
+
 #### Windows:
 ```
 https://nodejs.org/en/download/
