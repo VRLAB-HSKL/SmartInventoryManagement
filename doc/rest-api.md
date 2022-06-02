@@ -14,53 +14,14 @@ The following endpoints may be implemented in the future.
 ## Update user profile
 - HTTP-Method: PUT
 - URL: `http://{IP-Host}:{port}/rest/profiles/{userID}`
-- Request parameters:
 - Body:
     ```
     {
-        userName: <new user name>
+        nickname: <new nickname>,
+        email: <new email>,
+        password: <new password>
     }
     ```
-
-## Get all inventories of a user
-- HTTP-Method: GET
-- URL: `http://{IP-Host}:{port}/rest/{userID}/inventories/`
-
-## Get specific inventory of a user
-- HTTP-Method: GET
-- URL: `http://{IP-Host}:{port}/rest/{userID}/inventories/{inventoryID}`
-
-## Update specific inventory of a user
-- HTTP-Method: PUT
-- URL: `http://{IP-Host}:{port}/rest/{userID}/inventories/{inventoryID}`
-- Request parameters:
-- Body:
-    ```
-    {
-      name: <new name>  
-    }
-    ```
-
-## Add inventory for a user
-- HTTP-Method: POST
-- URL: `http://{IP-Host}:{port}/rest/{userID}/inventories/{inventoryID}`
-- Request parameters:
-- Body:
-    ```
-    {
-      name: <new name>  
-    }
-    ```
-
-## Delete specific inventory of a user
-- HTTP-Method: DELETE
-- URL: `http://{IP-Host}:{port}/rest/{userID}/inventories/{inventoryID}`
-- Request parameters:
-- Body:
-
-## Get all items of a inventory
-- HTTP-Method: GET
-- URL: `http://{IP-Host}:{port}/rest/{userID}/inventories/{inventoryID}/items`
 
 ## Sign up
 - HTTP-Method: POST
@@ -76,7 +37,7 @@ The following endpoints may be implemented in the future.
 - Response:
   ```
     {
-      email: <email>,
+      userId: <userId>,
       expires_in: <expiration-time in seconds>,
       token: <jwt>,
       refresh_token: <refresh jwt>
@@ -96,14 +57,84 @@ The following endpoints may be implemented in the future.
 - Response:
     ```
     {
-      email: <email>,
+      userId: <userId>,
       expires_in: <expiration-time in seconds>,
       token: <jwt>,
       refresh_token: <refresh jwt>
     }
     ```
+---
 
+## Get all inventories of an user
+- HTTP-Method: GET
+- URL: `http://{IP-Host}:{port}/rest/profiles/{userID}/inventories/`
 
+## Get specific inventory of an user
+- HTTP-Method: GET
+- URL: `http://{IP-Host}:{port}/rest/profiles/{userID}/inventories/{inventoryID}`
+- Response:
+  ```
+  {
+    name: <name>,
+    items: [items]
+  }
+  ```
+
+## Add inventory for an user
+- HTTP-Method: POST
+- URL: `http://{IP-Host}:{port}/rest/profiles/{userID}/inventories/`
+- Body:
+    ```
+    {
+      name: <new name>  
+    }
+    ```
+
+## Update specific inventory of an user
+- HTTP-Method: PUT
+- URL: `http://{IP-Host}:{port}/rest/profiles/{userID}/inventories/{inventoryID}`
+- Body:
+    ```
+    {
+      name: <new name>
+    }
+    ```
+    
+## Delete specific inventory of an user
+- HTTP-Method: DELETE
+- URL: `http://{IP-Host}:{port}/rest/profiles/{userID}/inventories/{inventoryID}`
+
+---
+
+## Add item for an inventory
+- HTTP-Method: POST
+- URL: `http://{IP-Host}:{port}/rest/profiles/{userID}/inventories/{inventoryID}/items`
+- Body:
+    ```
+    {
+      name: <new name>,
+      count: <new count>,
+      unit: <new unit>
+    }
+    ```
+
+## Update specific item of an inventory
+- HTTP-Method: PUT
+- URL: `http://{IP-Host}:{port}/rest/profiles/{userID}/inventories/{inventoryID}/items/{itemID}`
+- Body:
+    ```
+    {
+      name: <new name>,
+      count: <new count>,
+      unit: <new unit>
+    }
+    ```
+
+## Delete specific item of an inventory
+- HTTP-Method: DELETE
+- URL: `http://{IP-Host}:{port}/rest/profiles/{userID}/inventories/{inventoryID}/items/{itemID}`
+
+---
 
 # Template for new endpoints
 ## Foo
@@ -111,4 +142,5 @@ The following endpoints may be implemented in the future.
 - URL: `http://{IP-Host}:{port}/rest/foo`
 - Request parameters:
 - Body:
+- Reponse:
 
