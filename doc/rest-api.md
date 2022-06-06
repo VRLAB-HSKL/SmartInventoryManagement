@@ -10,10 +10,14 @@ The following endpoints may be implemented in the future.
 ## Get user profile
 - HTTP-Method: GET
 - URL: `http://{IP-Host}:{port}/rest/profiles/{userID}`
+- Header:
+  - Authorization: `Bearer {jwt}`
 
 ## Update user profile
 - HTTP-Method: PUT
 - URL: `http://{IP-Host}:{port}/rest/profiles/{userID}`
+- Header:
+  - Authorization: `Bearer {jwt}`
 - Body:
     ```
     {
@@ -68,10 +72,14 @@ The following endpoints may be implemented in the future.
 ## Get all inventories of an user
 - HTTP-Method: GET
 - URL: `http://{IP-Host}:{port}/rest/profiles/{userID}/inventories/`
+- Header:
+  - Authorization: `Bearer {jwt}`
 
 ## Get specific inventory of an user
 - HTTP-Method: GET
 - URL: `http://{IP-Host}:{port}/rest/profiles/{userID}/inventories/{inventoryID}`
+- Header:
+  - Authorization: `Bearer {jwt}`
 - Response:
   ```
   {
@@ -83,6 +91,8 @@ The following endpoints may be implemented in the future.
 ## Add inventory for an user
 - HTTP-Method: POST
 - URL: `http://{IP-Host}:{port}/rest/profiles/{userID}/inventories/`
+- Header:
+  - Authorization: `Bearer {jwt}`
 - Body:
     ```
     {
@@ -93,6 +103,8 @@ The following endpoints may be implemented in the future.
 ## Update specific inventory of an user
 - HTTP-Method: PUT
 - URL: `http://{IP-Host}:{port}/rest/profiles/{userID}/inventories/{inventoryID}`
+- Header:
+  - Authorization: `Bearer {jwt}`
 - Body:
     ```
     {
@@ -103,12 +115,16 @@ The following endpoints may be implemented in the future.
 ## Delete specific inventory of an user
 - HTTP-Method: DELETE
 - URL: `http://{IP-Host}:{port}/rest/profiles/{userID}/inventories/{inventoryID}`
+- Header:
+  - Authorization: `Bearer {jwt}`
 
 ---
 
 ## Add item for an inventory
 - HTTP-Method: POST
 - URL: `http://{IP-Host}:{port}/rest/profiles/{userID}/inventories/{inventoryID}/items`
+- Header:
+  - Authorization: `Bearer {jwt}`
 - Body:
     ```
     {
@@ -121,6 +137,8 @@ The following endpoints may be implemented in the future.
 ## Update specific item of an inventory
 - HTTP-Method: PUT
 - URL: `http://{IP-Host}:{port}/rest/profiles/{userID}/inventories/{inventoryID}/items/{itemID}`
+- Header:
+  - Authorization: `Bearer {jwt}`
 - Body:
     ```
     {
@@ -133,6 +151,8 @@ The following endpoints may be implemented in the future.
 ## Delete specific item of an inventory
 - HTTP-Method: DELETE
 - URL: `http://{IP-Host}:{port}/rest/profiles/{userID}/inventories/{inventoryID}/items/{itemID}`
+- Header:
+  - Authorization: `Bearer {jwt}`
 
 ---
 
