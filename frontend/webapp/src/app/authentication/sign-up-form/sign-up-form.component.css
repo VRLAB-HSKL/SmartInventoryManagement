@@ -1,0 +1,19 @@
+
+#togglePassword {
+    font-size: 2rem;
+    color: #0d6efd;
+    margin-left: -40px;
+}
+
+#togglePassword:hover {
+    cursor: pointer;
+}
+
+input.ng-invalid.ng-touched {
+    border: 2px red solid;
+}
+
+a:hover {
+    cursor: pointer;
+}
+
