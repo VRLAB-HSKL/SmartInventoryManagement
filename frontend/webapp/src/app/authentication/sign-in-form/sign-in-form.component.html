@@ -1,1 +1,34 @@
-<p>sign-in-form works!</p>
+
+<div class="container">
+    <div class="alert alert-danger text-center" role="alert" *ngIf="error"> <!-- Todo: Für was ist role="alert"-->
+        <p>{{ error }}</p>
+    </div>
+    <form #form="ngForm" (ngSubmit)="onSubmit(form)" class="border border-2 border-dark p-4">
+        <h1 class="text-center">Sign In</h1>
+        <div class="form-group mb-3">
+            <label class="form-label" for="email">Email</label>
+            <input class="form-control" type="email" name="email" id="email" ngModel required email #email="ngModel">
+            <span class="help-block" *ngIf="email.invalid && email.touched">Please enter a valid email address!</span>
+        </div>
+        <div class="form-group mb-3">
+            <div class="row">
+                <label class="form-label col" for="password">Password</label>
+                <a class="d-flex justify-content-end col">Forgot password?</a>
+            </div>
+            <div class="d-flex">
+                <input class="form-control" [type]="passwordFieldType" name="password" id="password" ngModel required minlength="8" maxlength="256" #password="ngModel">
+                <i id="togglePassword" class="bi" (click)="changePasswordVisibility()" [ngClass]="{'bi-eye-slash-fill': passwordFieldType !== 'password', 'bi-eye-fill': passwordFieldType === 'password'}"></i>   
+            </div>
+            <span class="help-block" *ngIf="password.invalid && password.touched">Password required (8 - 256 characters)!</span>
+        </div>
+        
+        <div class="text-center">
+            <button class="btn btn-primary" type="submit" [disabled]="form.invalid">Sign In</button>
+        </div>
+    </form>
+    
+    <div class="border border-2 border-dark mt-4 align-center text-center">
+        <a class="primary-link">New to TODO? Create an account.</a>
+    </div>
+</div>
+
