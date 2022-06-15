@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { AbstractControl, FormControl, NgForm, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { Router } from '@angular/router';
 import { AuthService } from '../auth.service';
 
 @Component({
@@ -13,7 +14,8 @@ export class SignInFormComponent implements OnInit {
   error: string | null = "";
 
 
-  constructor(private authService: AuthService) { }
+  constructor(private authService: AuthService,
+              private router: Router) { }
 
   ngOnInit(): void {
   }
@@ -35,7 +37,7 @@ export class SignInFormComponent implements OnInit {
     this.authService.signIn(email, password).subscribe(
       () => {
         console.log("User logged in");
-        // Todo: Zur Home-Seite (Logged-in) weiterleiten
+        this.router.navigate(["/home"]);
       }
     )
 
