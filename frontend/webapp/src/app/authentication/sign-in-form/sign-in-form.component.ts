@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { AbstractControl, FormControl, NgForm, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'app-sign-in-form',
@@ -12,7 +13,7 @@ export class SignInFormComponent implements OnInit {
   error: string | null = "";
 
 
-  constructor() { }
+  constructor(private authService: AuthService) { }
 
   ngOnInit(): void {
   }
@@ -32,6 +33,14 @@ export class SignInFormComponent implements OnInit {
     let password = form.value.password;
 
     console.log(`email=${email}, password=${password}`); // Todo: Den Log raus und dafür die Request-Logik rein.
+    this.authService.signin(email, password)
+      .subscribe(
+        () => {
+          console.log("User logged in");
+          // Todo: Zur Home-Seite (Logged-in) weiterleiten
+        }
+      )
+
 
     form.reset();
   }
