@@ -9,10 +9,11 @@ import { SignInFormComponent } from './authentication/sign-in-form/sign-in-form.
 import { HomeComponent } from './home/home.component';
 import { RouterModule, Routes } from '@angular/router';
 import { LandingPageComponent } from './landing-page/landing-page.component';
+import { AuthGuard } from './authentication/auth.guard';
 
 const appRoutes: Routes = [
   {path: '', component: LandingPageComponent},
-  {path: 'home', component: HomeComponent},
+  {path: 'home', component: HomeComponent, canActivate: [AuthGuard]},
   {path: 'signup', component: SignUpFormComponent},
   {path: 'signin', component: SignInFormComponent},
 ]
