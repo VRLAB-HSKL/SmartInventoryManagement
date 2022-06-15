@@ -31,16 +31,13 @@ export class SignInFormComponent implements OnInit {
   onSubmit(form: NgForm){
     let email = form.value.email;
     let password = form.value.password;
-
-    console.log(`email=${email}, password=${password}`); // Todo: Den Log raus und dafür die Request-Logik rein.
-    this.authService.signin(email, password)
-      .subscribe(
-        () => {
-          console.log("User logged in");
-          // Todo: Zur Home-Seite (Logged-in) weiterleiten
-        }
-      )
-
+    
+    this.authService.signIn(email, password).subscribe(
+      () => {
+        console.log("User logged in");
+        // Todo: Zur Home-Seite (Logged-in) weiterleiten
+      }
+    )
 
     form.reset();
   }

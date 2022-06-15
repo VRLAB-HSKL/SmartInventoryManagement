@@ -19,9 +19,20 @@ export class AuthService {
 
   constructor(private http: HttpClient) { }
 
-  signin(email: string, password: string){
+  signIn(email: string, password: string){
     return this.http.post<AuthResponseData>(`${environment.restApiUrl}/sign-in`,
       {
+        email: email,
+        password: password,
+      }
+    ).pipe(tap(authResponseData => this.setSession), shareReplay());//Todo: nochmal mit RXJS auseinandersetzen und dann diese Line hier nochmal überprüfen
+  }
+
+
+  signUp(nickname: string|null, email: string, password: string){
+    return this.http.post<AuthResponseData>(`${environment.restApiUrl}/sign-up`,
+      {
+        nickname: nickname,
         email: email,
         password: password,
       }

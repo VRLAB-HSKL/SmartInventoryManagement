@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, NgForm } from '@angular/forms';
+import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'app-sign-up-form',
@@ -14,7 +15,7 @@ export class SignUpFormComponent implements OnInit {
   error: string | null = "";
 
 
-  constructor() { }
+  constructor(private authService: AuthService) { }
 
   ngOnInit(): void {
   }
@@ -34,7 +35,12 @@ export class SignUpFormComponent implements OnInit {
     let email = form.value.email;
     let password = form.value.password;
     
-    console.log(`nickname=${nickname}, email=${email}, password=${password}`); // Todo: Den Log raus und dafür die Request-Logik rein.
+    this.authService.signUp(nickname, email, password).subscribe(
+      () => {
+        console.log("User signed up");
+        // Todo: Zur Home-Seite (Logged-in) weiterleiten
+      }   
+    )
 
     form.reset();
   }
