@@ -29,7 +29,7 @@ nutzer = Table("nutzer",metadata,
 #     user_email = Column(String, ForeignKey('Nutzer.email'))
 
 inventory =  Table("Inventory",metadata,
-              Column('id',Integer,primary_key=True),
+              Column('user_id',Integer,primary_key=True),
               Column('name_Inventory',String),
               Column('unit',String),
               Column('count',Integer),

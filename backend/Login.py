@@ -13,8 +13,9 @@ class signin(Resource):
         try:
             email = request.args.get('email')
             password = request.args.get('password')
-            print(email,password)
-            print(test_signin(email,password))
+            
+            #* Unit test
+            test_signin(email,password)
 
         except Exception:
             abort(Response("Error bei der Abfrage der Parameter in der Klasse Login"))
@@ -50,10 +51,10 @@ class signup(Resource):
         
 
 #! kann logout raus? wird doch im Frontend gemacht oder ?
-class Logout(Resource):
-    def get(self):
-        try:
-            resp = jsonify({"logout": True})
-        except Exception:
-            abort(Response("Error in der Klasse Logout"))
-        return resp
+# class Logout(Resource):
+#     def get(self):
+#         try:
+#             resp = jsonify({"logout": True})
+#         except Exception:
+#             abort(Response("Error in der Klasse Logout"))
+#         return resp

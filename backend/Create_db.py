@@ -73,6 +73,7 @@ def Check_Login(email, password):
         query = sqlalchemy.select(modules.nutzer).where(
             modules.nutzer.c.email == email, modules.nutzer.c.password == password)
         result = app.engine.execute(query).fetchall()
+        
         print(len(result))
         if(len(result)==1):
             return True
