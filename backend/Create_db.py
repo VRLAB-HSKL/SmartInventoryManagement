@@ -38,13 +38,14 @@ def create_tables():
 # * authentification -------------------------------------------
 
 
-def Insert_Register(new_email, new_password, new_nickname):
+def Insert_Register(email, hashed_password, nickname, salt):
 
     try:
         insert = modules.nutzer.insert().values(
-            nickname=new_nickname,
-            email=new_email,
-            password=new_password)
+            nickname=nickname,
+            email=email,
+            password=hashed_password,
+            salt=salt)
         
         print('----- insert register -----')
         conn = app.engine.connect()
@@ -70,15 +71,25 @@ def get_Userid(email):
 def Check_Login(email, password):
     #Nutzer = modules.metadata.tables['nutzer']
     try: 
-        query = sqlalchemy.select(modules.nutzer).where(
-            modules.nutzer.c.email == email, modules.nutzer.c.password == password)
+        query = sqlalchemy.select(modules.nutzer.c.password,modules.nutzer.c.salt).where(
+            modules.nutzer.c.email == email)
         result = app.engine.execute(query).fetchall()
         
-        print(len(result))
-        if(len(result)==1):
-            return True
-        else:
-            return False
+        
+        #salt = salt from db
+        #password_userinput = password von nutzer eingabe also ohne hash
+
+        # key = hashlib.pbkdf2_hmac(
+        #     'sha256', # The hash digest algorithm for HMAC
+        #     password.encode('utf-8'), # Convert the password to bytes
+        #     salt, # Provide the salt
+        #     100000, # It is recommended to use at least 100,000 iterations of SHA-256 
+        # )
+        
+        # if key == password_db:
+        #     return True
+        # else:
+        #     return False
     except:
         abort(Response("Fehler in der Datenbankabfrage Check_Login()"))
 

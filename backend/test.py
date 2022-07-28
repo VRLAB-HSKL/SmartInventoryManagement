@@ -9,17 +9,8 @@ from flask_restful import Resource, Api
             
             
 
-def test_get_locations_for_us_90210_check_country_equals_united_states():
-    
-
-   # with app.test_request_context("http://127.0.0.1//rest/sign-in",data={"email": "kevin@web", "password": "passwort"}):
-       # r = app.preprocess_request()
-    
-        
+def test_signin(): 
      response = requests.post("http://127.0.0.1:5000/rest/sign-in",data={"email": "kevin@web", "password": "passwort"})
-     #response_body = response.content
-   
-     content = json.loads(response.text)
      json_res = response.json()
      
      assert len(json_res["userid"]) > 0
@@ -29,13 +20,21 @@ def test_get_locations_for_us_90210_check_country_equals_united_states():
      assert response.status_code == 200
     
      
+
+
+
+def test_signup(): 
+     response = requests.post("http://127.0.0.1:5000/rest/sign-up",data={"email": "kevin@web", "password": "passwort", "nickname": "kev"})
+     json_res = response.json()
      
-     
-     #print(response_body[0])
-     #assert response_body["login"] == True
-    #  response_body = response.test()
-    #  print(response_body)
-    #  assert response_body["login"] == True
+     assert len(json_res["userid"]) > 0
+     assert len(json_res["token"]) == 327
+     assert len(json_res["refresh_token"]) == 328
+     assert len(json_res["expires in"]) > 5
+     assert response.status_code == 200
+
+
+
      
      
 # def test_signup(email,password,nickname):

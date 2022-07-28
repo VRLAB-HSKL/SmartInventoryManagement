@@ -20,6 +20,7 @@ nutzer = Table("nutzer",metadata,
               Column('nickname',String),
               Column('email',String,primary_key=True),
               Column('password',String),
+              Column('salt',String),
               Column('userid',Integer,autoincrement=True))
 
 # class Inventory(base):  
