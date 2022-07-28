@@ -71,7 +71,7 @@ def create_Jwt(email):
     access_token = create_access_token(identity=email, expires_delta=expires)
     
     #userid = Create_db.get_Userid()
-    resp = jsonify({'login:': True, 'token':access_token, 'refresh_token': refresh_token , 'userid': "userid", 'expires in': str(expires)})
+    resp = jsonify({'token':access_token, 'refresh_token': refresh_token , 'userid': "userid1", 'expires in': str(expires)})
     
     return (resp) 
 
@@ -93,7 +93,7 @@ def set_Resource():
     api.add_resource(Inventory.Delete_Item_Inventory1, '/rest/profiles/<int:userID>/inventories/<int:inventoryID>/items/<int:itemID>')
 
     api.add_resource(Login.signin, '/rest/sign-in')
-    api.add_resource(Login.Logout, '/Logout')
+    #api.add_resource(Login.Logout, '/Logout')
     api.add_resource(Login.signup, '/rest/sign-up')
 
 
@@ -114,4 +114,4 @@ if __name__ == '__main__':
     #Create_db.create_tables()
     # Create_db.insert_Register("Lukas","lukas@web.de","Passwort123")
     # Create_db.insert_Product("Milch","lukas@web.de",1)
-    app.run(debug=True)
+    app.run(debug=False)

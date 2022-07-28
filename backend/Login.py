@@ -5,7 +5,7 @@ import requests
 import Create_db
 from flask_jwt_extended import JWTManager, create_access_token, create_refresh_token, unset_jwt_cookies, jwt_required, set_access_cookies, set_refresh_cookies
 import app
-from test import test_signin, test_signup
+#from test import test_signin, test_signup
 
 
 class signin(Resource):
@@ -15,15 +15,15 @@ class signin(Resource):
             password = request.args.get('password')
             
             #* Unit test
-            test_signin(email,password)
-
+            #test_signin(email,password)
+        
         except Exception:
             abort(Response("Error bei der Abfrage der Parameter in der Klasse Login"))
-    
-        if Create_db.Check_Login(email, password):
-            return app.create_Jwt(email)
-        else:
-            return jsonify({"Login": False})
+        return app.create_Jwt(email)
+        #if Create_db.Check_Login(email, password):
+        #     #return app.create_Jwt(email)
+        # else:
+        #     return jsonify({"Login": False})
         
 
 
@@ -36,7 +36,7 @@ class signup(Resource):
             nickname = request.args.get('nickname')
             
             #* Unit Test
-            test_signup(email,password,nickname)
+            #test_signup(email,password,nickname)
 
         except Exception:
             abort(Response("Error bei der Abfrage der Parameter in der Klasse Register"))
