@@ -1,3 +1,4 @@
+from lib2to3.pgen2.token import EQUAL
 import requests
 import json
 import pytest
@@ -6,33 +7,36 @@ from flask import Flask, jsonify
 from flask_restful import Resource, Api
 
 
-            
-            
 
 def test_signin(): 
-     response = requests.post("http://127.0.0.1:5000/rest/sign-in",data={"email": "kevin@web", "password": "passwort"})
+     response = requests.post("http://127.0.0.1:5000/rest/sign-in?email=kevin@web.de&password=passwort")
      json_res = response.json()
      
      assert len(json_res["userid"]) > 0
-     assert len(json_res["token"]) == 327
-     assert len(json_res["refresh_token"]) == 328
+     assert len(json_res["token"]) >= 300
+     assert len(json_res["refresh_token"]) >= 300
      assert len(json_res["expires in"]) > 5
      assert response.status_code == 200
     
      
-
-
-
 def test_signup(): 
-     response = requests.post("http://127.0.0.1:5000/rest/sign-up",data={"email": "kevin@web", "password": "passwort", "nickname": "kev"})
+     response = requests.post("http://127.0.0.1:5000/rest/sign-up?password=passwort&email=kevin@web.de&nickname=kev")
      json_res = response.json()
      
      assert len(json_res["userid"]) > 0
-     assert len(json_res["token"]) == 327
-     assert len(json_res["refresh_token"]) == 328
+     assert len(json_res["token"]) >= 300
+     assert len(json_res["refresh_token"]) >= 300
      assert len(json_res["expires in"]) > 5
      assert response.status_code == 200
 
+
+def test_new_Inventory(): 
+     response = requests.post("http://127.0.0.1:5000/rest/profiles/45/inventories?name=inventar1&email=kevin@web.de")
+     json_res = response.json()
+     
+     assert json_res["userID"] == 45
+     assert json_res["name"] == "inventar1"
+     assert response.status_code == 200
 
 
      

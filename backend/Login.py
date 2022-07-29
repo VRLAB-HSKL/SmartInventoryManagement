@@ -6,7 +6,7 @@ import Create_db
 from flask_jwt_extended import JWTManager, create_access_token, create_refresh_token, unset_jwt_cookies, jwt_required, set_access_cookies, set_refresh_cookies
 import app
 import os
-import hashlib
+from hashlib import pbkdf2_hmac
 #from test import test_signin, test_signup
 
 
@@ -39,15 +39,13 @@ class signup(Resource):
             
             salt = os.urandom(32)
             password = password
+            print(password,email,nickname)
 
-            key = hashlib.pbkdf2_hmac(
-                'sha256', # The hash digest algorithm for HMAC
-                password.encode('utf-8'), # Convert the password to bytes
-                salt, # Provide the salt
-                100000, # It is recommended to use at least 100,000 iterations of SHA-256 
-            )
+
+            key = pbkdf2_hmac('sha256', password.encode('utf-8'), salt, 100_000).hex()
             
             hashed_password = key
+            
             
             #////*asserts///*
             #test_signup(email,password,nickname)

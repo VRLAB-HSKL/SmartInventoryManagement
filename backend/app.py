@@ -85,7 +85,7 @@ def set_Resource():
     # api.add_resource(Inventory.Update_Inventory, '/successfully_login/Update_Inventory')
     
     #! Die folgenden endpoints sind die neuen wie in der MArkdown besschrieben
-    api.add_resource(Inventory.New_Inventory1, '/rest/profiles/<int:userID>/inventories')
+    api.add_resource(Inventory.New_Inventory1, '/rest/profiles/<userID>/inventories')
     api.add_resource(Inventory.Update_Inventory1, '/rest/profiles/<int:userID>/inventories/<int:inventoryID>')
     api.add_resource(Inventory.Delete_Inventory1, '/rest/profiles/<int:userID>/inventories/<int:inventoryID>')
     api.add_resource(Inventory.Add_Item_Inventory1, '/rest/profiles/<int:userID>/inventories/<int:inventoryID>/items')

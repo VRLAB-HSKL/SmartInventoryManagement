@@ -76,20 +76,16 @@ def Check_Login(email, password):
         result = app.engine.execute(query).fetchall()
         
         
-        #salt = salt from db
-        #password_userinput = password von nutzer eingabe also ohne hash
-
-        # key = hashlib.pbkdf2_hmac(
-        #     'sha256', # The hash digest algorithm for HMAC
-        #     password.encode('utf-8'), # Convert the password to bytes
-        #     salt, # Provide the salt
-        #     100000, # It is recommended to use at least 100,000 iterations of SHA-256 
-        # )
+        # salt = salt from db
+        # password_userinput = "password" user input
+        # key1 = pbkdf2_hmac('sha256', password.encode('utf-8'), salt, 100_000).hex()
+                    
         
-        # if key == password_db:
+        # if key from db  == key1:
+        #     print("true")
         #     return True
         # else:
-        #     return False
+        #     return False      
     except:
         abort(Response("Fehler in der Datenbankabfrage Check_Login()"))
 
