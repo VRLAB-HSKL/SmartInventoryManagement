@@ -72,7 +72,6 @@ def create_Jwt(email):
     
     #userid = Create_db.get_Userid()
     resp = jsonify({'token':access_token, 'refresh_token': refresh_token , 'userid': "userid1", 'expires in': str(expires)})
-    
     return (resp) 
 
 def set_Resource():
@@ -103,15 +102,15 @@ if __name__ == '__main__':
     #Create_db.delete_Product("World","World")
     #Create_db.check_Login("World","passwort123")
     
-    #Create_db.create_tables()
+    Create_db.create_tables()
     
     #Create_db.Insert_Register("kim@web.de","passwort123","kim")
    # Create_db.Insert_Product("Wurst","kim@web.de","2")
    
     #Create_db.Update_Product("Milch","kevin@web.de","2")
-    #Create_db.show()
+    Create_db.show()
     #Create_db.Show_Products("kim@web.de")
     #Create_db.create_tables()
     # Create_db.insert_Register("Lukas","lukas@web.de","Passwort123")
     # Create_db.insert_Product("Milch","lukas@web.de",1)
-    app.run(debug=False)
+    app.run(debug=True)

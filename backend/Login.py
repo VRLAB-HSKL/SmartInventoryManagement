@@ -7,7 +7,7 @@ from flask_jwt_extended import JWTManager, create_access_token, create_refresh_t
 import app
 import os
 from hashlib import pbkdf2_hmac
-#from test import test_signin, test_signup
+
 
 
 class signin(Resource):
@@ -16,16 +16,18 @@ class signin(Resource):
             email = request.args.get('email')
             password = request.args.get('password')
             
-            #* Unit test
-            #test_signin(email,password)
+            assert len(email)!=0
+            assert len(password)!=0
+            assert isinstance(email,str)
+            assert isinstance(password,str)
         
         except Exception:
-            abort(Response("Error bei der Abfrage der Parameter in der Klasse Login"))
-        return app.create_Jwt(email)
-        #if Create_db.Check_Login(email, password):
-        #     #return app.create_Jwt(email)
-        # else:
-        #     return jsonify({"Login": False})
+            abort(Response("Error bei der Abfrage der Parameter in der Klasse signin"))
+            
+        if Create_db.Check_Login(email, password):
+            return app.create_Jwt(email)
+        else:
+            return jsonify({"Login": False})
         
 
 
@@ -37,33 +39,27 @@ class signup(Resource):
             password = request.args.get('password')
             nickname = request.args.get('nickname')
             
+            assert len(email)!=0
+            assert len(password)!=0 
+            assert len(nickname)!=0
+            assert isinstance(email,str)
+            assert isinstance(password,str)
+            assert isinstance(nickname,str)
+            
             salt = os.urandom(32)
             password = password
-            print(password,email,nickname)
-
-
-            key = pbkdf2_hmac('sha256', password.encode('utf-8'), salt, 100_000).hex()
             
+            key = pbkdf2_hmac('sha256', password.encode('utf-8'), salt, 100_000).hex()
+            salt =salt.hex()
             hashed_password = key
             
-            
-            #////*asserts///*
-            #test_signup(email,password,nickname)
-
         except Exception:
-            abort(Response("Error bei der Abfrage der Parameter in der Klasse Register"))
+            abort(Response("Error bei der Abfrage der Parameter in der Klasse signup"))
             
-        #//* zum testen der unit tests -------
-        return app.create_Jwt(email)
-        #//* ende testen ----------------------
-    
-    
-        #////* Add salt and hashed_password to db /////*
-            
-        # if Create_db.Insert_Register(email, hashed_password, nickname,salt):
-        #     return app.create_Jwt(email)
-        # else:
-        #     return jsonify({"sign-Up": False})
+        if Create_db.Insert_Register(email, hashed_password, nickname,salt):
+            return app.create_Jwt(email)
+        else:
+            return jsonify({"sign-Up": False})
         
     
         

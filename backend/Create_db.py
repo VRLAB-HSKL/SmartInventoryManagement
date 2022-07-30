@@ -8,7 +8,7 @@ from sqlalchemy import inspect
 from sqlalchemy import select
 import sqlalchemy
 from flask import jsonify, Response, request,jsonify,abort
-
+from hashlib import pbkdf2_hmac
 
 def show():
     product = modules.metadata.tables['nutzer']
@@ -69,25 +69,45 @@ def get_Userid(email):
         
         
 def Check_Login(email, password):
-    #Nutzer = modules.metadata.tables['nutzer']
     try: 
+       
         query = sqlalchemy.select(modules.nutzer.c.password,modules.nutzer.c.salt).where(
             modules.nutzer.c.email == email)
+        
         result = app.engine.execute(query).fetchall()
+        salt_bytes =  bytes.fromhex(result[0][1])
+        salt = salt_bytes
+      
+        key1 = pbkdf2_hmac('sha256', password.encode('utf-8'), salt, 100_000).hex()
         
-        
-        # salt = salt from db
-        # password_userinput = "password" user input
-        # key1 = pbkdf2_hmac('sha256', password.encode('utf-8'), salt, 100_000).hex()
-                    
-        
-        # if key from db  == key1:
-        #     print("true")
-        #     return True
-        # else:
-        #     return False      
+        if result[0][0]  == key1:
+            return True
+        else:
+            return False      
     except:
         abort(Response("Fehler in der Datenbankabfrage Check_Login()"))
+
+
+# def Check_Login_Test(email, password):
+#     try: 
+       
+#         query = sqlalchemy.select(modules.nutzer.c.password,modules.nutzer.c.salt).where(
+#             modules.nutzer.c.email == email)
+        
+#         result = app.engine.execute(query).fetchall()
+#         salt_bytes =  bytes.fromhex(result[0][1])
+#         salt = salt_bytes
+      
+#         key1 = pbkdf2_hmac('sha256', password.encode('utf-8'), salt, 100_000).hex()
+        
+#         if result[0][0]  == key1:
+#             return True
+#         else:
+#             return False      
+#     except:
+#         abort(Response("Fehler in der Datenbankabfrage Check_Login()"))
+
+
 
 # * -----------------------------------------------------------
 
