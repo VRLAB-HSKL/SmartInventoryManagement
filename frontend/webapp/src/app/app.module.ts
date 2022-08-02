@@ -10,6 +10,7 @@ import { HomeComponent } from './home/home.component';
 import { RouterModule, Routes } from '@angular/router';
 import { LandingPageComponent } from './landing-page/landing-page.component';
 import { AuthGuard } from './authentication/auth.guard';
+import { InventoryOverviewComponent } from './home/inventory-overview/inventory-overview.component';
 
 const appRoutes: Routes = [
   {path: '', component: LandingPageComponent},
@@ -24,7 +25,8 @@ const appRoutes: Routes = [
     SignUpFormComponent,
     SignInFormComponent,
     HomeComponent,
-    LandingPageComponent
+    LandingPageComponent,
+    InventoryOverviewComponent
   ],
   imports: [
     BrowserModule,

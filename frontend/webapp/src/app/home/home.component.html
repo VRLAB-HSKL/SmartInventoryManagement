@@ -1,1 +1,19 @@
-<p>home works!</p>
+
+<div class="container">
+    <div class="d-grid gap-5">
+        <h1 class="text-center">Hello!</h1>    
+        <div class="text-center">
+            <button class="btn btn-primary" type="submit">Create new inventory</button>
+        </div>
+        <div class="border  border-2 border-dark rounded-3">
+            <div class="text-center">
+                <ul class="list-inline m-0">
+                    <li class="list-inline-item my-2 mx-1" *ngFor="let inventoryInfo of inventoryInfos">
+                        <app-inventory-overview [inventoryInfo]="inventoryInfo"></app-inventory-overview>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
