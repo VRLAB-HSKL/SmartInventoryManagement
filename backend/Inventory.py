@@ -2,19 +2,25 @@ from flask_restful import Resource
 from flask import jsonify, request
 import Create_db
 #,test as test
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import jwt_required, decode_token
 
 
-class New_Inventory(Resource):
-    #@jwt_required()
-    def post(self):
-        email = request.args.get('email')
-        name = request.args.get('name')
+# class New_Inventory(Resource):
+#     #@jwt_required()
+   
+#     def post(self,userID):
+        
+#         print(request.headers['Authorization'])
+#         if decode_token(request.headers['Authorization']):
+#             print("JWT verification true")
+#             name = request.get_json()["name"]
+            
+#             # if Create_db.Insert_Inventory(name, email):
+#         #     print("Inventory added")
 
-        return jsonify({"email" : email,"name" : name})
+#             return jsonify({"name" : name})
 
-        # if Create_db.Insert_Inventory(name, email):
-        #     print("Inventory added")
+
 
 
 class Show_Inventory(Resource):
@@ -54,10 +60,20 @@ class Update_Inventory(Resource):
 class New_Inventory1(Resource):
  
     def post(self,userID):
-        name = request.args.get('name')
+
+        #todo felzmann nachschauen ob is oder !=
+        access_token= None
+        if  request.headers.get('Authorization') != None:
+            access_token = request.headers['Authorization'][7:]
+            
+        print(access_token)
+        if decode_token(access_token):
+            print("JWT verification true")
+        name = request.get_json()["name"]
         
         #test.test_new_Inventory(userID,name)
         #print(userID,name)
+        
         resp= jsonify({'name' : str(name), "userID": int(userID) })
        # resp = jsonify({'token':access_token, 'refresh_token': refresh_token , 'userid': "userid1", 'expires in': str(expires)})
     

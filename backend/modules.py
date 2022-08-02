@@ -16,27 +16,26 @@ metadata = MetaData(app.engine)
 #     email = Column(String,primary_key=True)
 #     password = Column(String)
 
-nutzer = Table("nutzer",metadata,
-              Column('nickname',String),
-              Column('email',String,primary_key=True),
-              Column('password',String),
-              Column('salt',String))
-              #Column('userid',Integer,autoincrement=True))
+user = Table("user",metadata,
+              Column('nickname',String, nullable=True),
+              Column('email',String,unique=True),
+              Column('password',String, nullable=False),
+              Column('salt',String, nullable=False),
+              Column('user_id',Integer,primary_key=True,autoincrement=True))
 
-# class Inventory(base):  
-#     __tablename__ = 'Inventory'
-#     id = Column(Integer, primary_key=True)
-#     name = Column(String)
-#     user_email = Column(String, ForeignKey('Nutzer.email'))
 
 inventory =  Table("Inventory",metadata,
-              Column('user_id',Integer,primary_key=True),
-              Column('name_Inventory',String),
-              Column('unit',String),
-              Column('count',Integer),
-              Column('user_email',String,ForeignKey('nutzer.email')))
+              Column('user_id',Integer,ForeignKey('user.user_id')),
+              Column('name_Inventory',String,nullable=False),
+              Column('inventory_id',Integer, primary_key=True,autoincrement=True) 
+              )
 
-
+item = Table("Item",metadata,
+            Column('inventory_id',Integer, ForeignKey('Inventory.inventory_id'),
+            Column('item_id',Integer, primary_key=True,autoincrement=True),      
+            Column('name',String,nullable=False),
+            Column('unit',String, nullable=False),
+            Column('count',Integer,nullable=False)))
 
 #class Product(base):  
  #   __tablename__ = 'Product'

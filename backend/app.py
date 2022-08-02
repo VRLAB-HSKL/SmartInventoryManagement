@@ -10,7 +10,7 @@ from sqlalchemy.orm import sessionmaker
 from os import getenv
 from dotenv import load_dotenv
 
-from flask_jwt_extended import JWTManager, create_access_token, create_refresh_token, set_access_cookies, set_refresh_cookies, jwt_required, get_jwt_identity, unset_jwt_cookies
+from flask_jwt_extended import JWTManager, create_access_token, create_refresh_token, set_access_cookies, set_refresh_cookies, jwt_required, get_jwt_identity, unset_jwt_cookies, decode_token
 from flask_cors import CORS
 import datetime
 
@@ -65,14 +65,21 @@ class Arduino_Key(Resource):
 
 
 def create_Jwt(email):
-
-    expires = datetime.timedelta(minutes=30)
-    refresh_token = create_refresh_token(identity=email,expires_delta=expires)
-    access_token = create_access_token(identity=email, expires_delta=expires)
-    
-    #userid = Create_db.get_Userid()
-    resp = jsonify({'token':access_token, 'refresh_token': refresh_token , 'userid': "userid1", 'expires in': str(expires)})
-    return (resp) 
+#todo: decode crf value checken!
+    try:
+        expires = datetime.timedelta(seconds=1800)
+        refresh_token = create_refresh_token(identity=email,expires_delta=expires)
+        access_token = create_access_token(identity=email, expires_delta=expires)
+        
+        #userid = Create_db.get_Userid()
+        # if decode_token(access_token):
+        #     print("JWT verification true")
+        resp = jsonify({'token':access_token, 'refresh_token': refresh_token , 'userid': "userid1", 'expires in': str(expires)})
+        return (resp)
+    except Exception as e:
+        print(e)
+        return "JWT verification failed"
+        #return (e) 
 
 def set_Resource():
     api.add_resource(Main, '/')

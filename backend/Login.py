@@ -1,3 +1,4 @@
+import email
 from logging import raiseExceptions
 from flask_restful import Resource
 from flask import Response, request, jsonify, abort
@@ -13,8 +14,9 @@ from hashlib import pbkdf2_hmac
 class signin(Resource):
     def post(self):
         try:
-            email = request.args.get('email')
-            password = request.args.get('password')
+            
+            email = request.get_json()["email"]
+            password = request.get_json()["password"]
             
             assert len(email)!=0
             assert len(password)!=0
@@ -35,20 +37,20 @@ class signup(Resource):
     
     def post(self):
         try:
-            email = request.args.get('email')
-            password = request.args.get('password')
-            nickname = request.args.get('nickname')
-            
+            # email = request.args.get('email')
+            # password = request.args.get('password')
+            # nickname = request.args.get('nickname')
+            #print(request.data)
+            email = request.get_json()["email"]
+            password = request.get_json()["password"]
+            nickname = request.get_json()["nickname"]
             assert len(email)!=0
-            assert len(password)!=0 
-            assert len(nickname)!=0
-            assert isinstance(email,str)
-            assert isinstance(password,str)
-            assert isinstance(nickname,str)
+            #gibts die email 
+            assert len(password)<256
+            assert len(password)>8
             
             salt = os.urandom(32)
             password = password
-            
             key = pbkdf2_hmac('sha256', password.encode('utf-8'), salt, 100_000).hex()
             salt =salt.hex()
             hashed_password = key
