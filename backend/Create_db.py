@@ -11,7 +11,7 @@ from flask import jsonify, Response, request,jsonify,abort
 from hashlib import pbkdf2_hmac
 
 def show():
-    product = modules.metadata.tables['nutzer']
+    product = modules.metadata.tables['User']
    # product = modules.metadata.tables['Product']
     query = sqlalchemy.select(product)
     # Fetch all the records
@@ -41,7 +41,7 @@ def create_tables():
 def Insert_Register(email, hashed_password, nickname, salt):
 
     try:
-        insert = modules.nutzer.insert().values(
+        insert = modules.user.insert().values(
             nickname=nickname,
             email=email,
             password=hashed_password,
@@ -53,14 +53,14 @@ def Insert_Register(email, hashed_password, nickname, salt):
         return True
     
     except Exception:
-        abort(Response("Fehler in der Datenbankabfrage def Insert_Register()"))
+        return False
         
         
     
 def get_Userid(email):
     try: 
-        query = sqlalchemy.select(modules.nutzer.c.userid).where(
-            modules.nutzer.c.email == email)
+        query = sqlalchemy.select(modules.user.c.userid).where(
+            modules.user.c.email == email)
         result = app.engine.execute(query).fetchall()
         print(result)
         return result
@@ -71,13 +71,12 @@ def get_Userid(email):
 def Check_Login(email, password):
     try: 
        
-        query = sqlalchemy.select(modules.nutzer.c.password,modules.nutzer.c.salt).where(
-            modules.nutzer.c.email == email)
+        query = sqlalchemy.select(modules.user.c.password,modules.user.c.salt).where(
+            modules.user.c.email == email)
         
         result = app.engine.execute(query).fetchall()
         salt_bytes =  bytes.fromhex(result[0][1])
         salt = salt_bytes
-      
         key1 = pbkdf2_hmac('sha256', password.encode('utf-8'), salt, 100_000).hex()
         
         if result[0][0]  == key1:
@@ -85,7 +84,7 @@ def Check_Login(email, password):
         else:
             return False      
     except:
-        abort(Response("Fehler in der Datenbankabfrage Check_Login()"))
+        return False
 
 
 # def Check_Login_Test(email, password):
@@ -131,37 +130,29 @@ def Check_Login(email, password):
    
 
 
-def Insert_Inventory(name, user_email):
+def Insert_Inventory(name_inventory, user_id):
+    try:
+        insert = modules.inventory.insert().values(
+            name_Inventory=name_inventory,
+            user_id=user_id)
 
-    insert = modules.inventory.insert().values(
-        name_Inventory=name,
-        user_email=user_email)
-
-    print('----- insert Inventory-----')
-    conn = app.engine.connect()
-    conn.execute(insert)
+        print('----- insert Inventory-----')
+        conn = app.engine.connect()
+        conn.execute(insert)
+        
+        return (jsonify({"Insert_Inventory": "Inentory successfully inserted"}))
+    except:
+        return (jsonify({"Insert_Inventory": "unable to insert Inventory into db"}))
+        
 
 # * -----------------------------------------------------------
 
 # * delete Stuff-----------------------------------------------
 
-
-# def Delete_Product(name, email):
-#     try:
-#         delete = modules.product.delete().where(
-#             modules.product.c.user_email == email, modules.product.c.name == name)
-        
-#         print('----- delete Product-----')
-#         conn = app.engine.connect()
-#         conn.execute(delete)
-#         return True
-#     except Exception:
-#         abort(Response("Fehler in der Datenbankabfrage def Delete_Product()"))
-
-
-def Delete_Inventory(email, name):
+def Delete_Inventory(inventory_id,user_id):
+    
     delete = modules.inventory.delete().where(
-        modules.inventory.c.user_email == email, modules.inventory.c.name == name)
+        modules.inventory.c.user_id == user_id, modules.inventory.c.inventory_id == inventory_id)
     
     print('----- delete Inventory-----')
     conn = app.engine.connect()
@@ -175,61 +166,59 @@ def map_return(record):
 
 
 
-
-def Show_Inventory(email):
-    inventory = modules.metadata.tables['Inventory']
-    #query = sqlalchemy.select(inventory)
+def Show_Spezific_Inventory(inventory_id):
     
-    query = sqlalchemy.select(inventory).where(
-        inventory.c.user_email == email)
+    item = modules.metadata.tables['Items']
+
+    query = sqlalchemy.select(item.c.name,item.c.count,item.c.unit).where(
+        item.c.inventory_id == inventory_id)
     # Fetch all the records
     result = app.engine.execute(query).fetchall()
     # View the records
-    #!testen-----------------------------
-    squared = map(map_return, result)
-    #!testen-----------------------------
-    
+    Inventorie = []
     for record in result:
-        print(record)
-
-
-# def Show_Products(email):
-    
-#     try:
-#         products = select(modules.product.c.name,modules.product.c.count).where(modules.product.c.user_email == email)
-#         result = app.engine.execute(products)
+        Inventorie.append(str(record))
         
-#         # View the records
-#         list = []
-#         for record in result:
-#             list.append(str(record))
-#         return jsonify(results = list)
-#     except Exception:
-#         abort(Response("Fehler in der Datenbankabfrage def Show_Products()"))
+    return jsonify({"Spezific Inventorie": Inventorie})
+
+
+
+
+def Show_Inventory(user_id):
+    
+    inventory = modules.metadata.tables['Inventory']
+
+    query = sqlalchemy.select(inventory).where(
+        inventory.c.user_id == user_id)
+    # Fetch all the records
+    result = app.engine.execute(query).fetchall()
+    # View the records
+    all_inventories = []
+    for record in result:
+        all_inventories.append(str(record))
+        
+    return jsonify({"All Inventories": all_inventories})
+
+
 
 # * -----------------------------------------------------------
 
 # * update Stuff-----------------------------------------------
 
 
-def Update_Inventory(email, oldname):
+def Update_Inventory(inventory_id, user_id,name_Inventory):
 
-    update = modules.inventory.update().where(modules.inventory.c.user_email == email,
-                                              modules.inventory.c.name == oldname).values(name="new Name")
-    print('----- update -----')
-    conn = app.engine.connect()
-    conn.execute(update)
+    try:
+        update = modules.inventory.update().where(
+            modules.inventory.c.inventory_id == inventory_id,
+            modules.inventory.c.user_id == user_id).values(name_Inventory=name_Inventory)
+        
+        print('----- update -----')
+        conn = app.engine.connect()
+        conn.execute(update)
+        
+    except Exception as e:
+         return jsonify({"Exception": e})
 
-
-# def Update_Product(name, email, count):
-#     try:
-#         update = modules.product.update().where(modules.product.c.user_email == email,
-#                                                 modules.product.c.name == name).values(count=count)
-#         print('----- update -----')
-#         conn = app.engine.connect()
-#         conn.execute(update)
-#         return True
-#     except Exception:
-#         abort(Response("Fehler in der Datenbankabfrage def Update_Product()"))
 
 # * -----------------------------------------------------------

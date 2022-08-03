@@ -20,7 +20,7 @@ def test_signin():
     
      
 def test_signup(): 
-     response = requests.post("http://127.0.0.1:5000/rest/sign-up?password=passwort&email=kevin@web.de&nickname=kev")
+     response = requests.post("http://127.0.0.1:5000/rest/sign-up?password=passwort34234234&email=kevin23423@web.de&nickname=kev")
      json_res = response.json()
      
      assert len(json_res["userid"]) > 0

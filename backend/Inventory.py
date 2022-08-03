@@ -1,139 +1,119 @@
 from flask_restful import Resource
 from flask import jsonify, request
 import Create_db
-#,test as test
 from flask_jwt_extended import jwt_required, decode_token
 
 
-# class New_Inventory(Resource):
-#     #@jwt_required()
-   
-#     def post(self,userID):
-        
-#         print(request.headers['Authorization'])
-#         if decode_token(request.headers['Authorization']):
-#             print("JWT verification true")
-#             name = request.get_json()["name"]
-            
-#             # if Create_db.Insert_Inventory(name, email):
-#         #     print("Inventory added")
+def validate_token(JWT_token):
+    return (decode_token(JWT_token))
 
-#             return jsonify({"name" : name})
-
-
-
-
-class Show_Inventory(Resource):
-    @jwt_required()
-    def get(self):
-        email = request.args.get('email')
-        name = request.args.get('name')
-
-        data = Create_db.Show_Inventory(email)
-
-        print(data)
-
-
-class Delete_Inventory(Resource):
-    @jwt_required()
-    def post(self):
-        email = request.args.get('email')
-        name = request.args.get('name')
-
-        if Create_db.Delete_Inventory(email, name):
-            print("Successfully deleted")
-
-
-class Update_Inventory(Resource):
-    @jwt_required()
-    def post(self):
-        email = request.args.get('email')
-        name = request.args.get('name')
-        count = request.args.get('count')
-
-        if Create_db.Update_Inventory(email, name):
-            print("Successfully updated")
-            
-#----------------------------------------------------------------------------------------
-# Neue Funktionalen Anforerungen wie von Felzmann gefordert mit Tests
-
-class New_Inventory1(Resource):
+# create and get Inventories
+class New_Inventory(Resource):
  
+ # create new Inventory 
     def post(self,userID):
 
-        #todo felzmann nachschauen ob is oder !=
-        access_token= None
-        if  request.headers.get('Authorization') != None:
-            access_token = request.headers['Authorization'][7:]
+        try:
+            access_token= None
             
-        print(access_token)
-        if decode_token(access_token):
-            print("JWT verification true")
-        name = request.get_json()["name"]
+            # check if Authorization header is None
+            if  request.headers.get('Authorization') is not None:
+                access_token = request.headers['Authorization'][7:]
+                
+                # if token valid then add Inventory
+                if validate_token(access_token):
+                        name = request.get_json()["name"]
+                        return(Create_db.Insert_Inventory(name,userID))
+                else:
+                     jsonify({'access token' : "is not valid" })       
+  
+        except Exception as e:
+            return jsonify({'Exception' : e })
         
-        #test.test_new_Inventory(userID,name)
-        #print(userID,name)
-        
-        resp= jsonify({'name' : str(name), "userID": int(userID) })
-       # resp = jsonify({'token':access_token, 'refresh_token': refresh_token , 'userid': "userid1", 'expires in': str(expires)})
-    
-        return (resp)
-        
-        
-        # insert into db ...
-        
-        print(userID)
+# Get all inventories of an user
+    def get(self,userID):
 
-class Delete_Inventory1(Resource):
+        try:
+            access_token= None
+            
+            # check if Authorization header is None
+            if  request.headers.get('Authorization') is not None:
+                access_token = request.headers['Authorization'][7:]
+                
+                # if token valid then show Inventorys
+                if validate_token(access_token):
+                     return(Create_db.Show_Inventory(userID))
+                else:
+                     jsonify({'access token' : "is not valid" })
+            else:
+                return jsonify({'access token' : "is not in Authorization header" })
+                
+        except Exception as e:
+            return jsonify({'Exception' : e })
+    
+    
+
+class Delete_Inventory(Resource):
 
     def delete(self,userID,inventoryID):
-        
-      #  test.test_delete_Inventory(userID,inventoryID)
-        
-            #delete in db ...
+        try:
+            access_token= None
+            
+            # check if Authorization header is None
+            if  request.headers.get('Authorization') is not None:
+                access_token = request.headers['Authorization'][7:]
+                
+                # if token valid then delete Inventory
+                if validate_token(access_token):
+                     return(Create_db.Delete_Inventory(inventoryID,userID))
+                else:
+                     jsonify({'access token' : "is not valid" })
+      
+        except Exception as e:
+            return jsonify({'Exception' : e })
+    
+            
+       
 
-        print("Successfully deleted",userID,inventoryID)
-
-
-
-class Update_Inventory1(Resource):
+class Update_Inventory(Resource):
+    
     def put(self,userID,inventoryID):
-        name = request.args.get('name')
         
-       # test.test_update_Inventory(userID,inventoryID,name)
-        # updaten in db ...
-        
-        print(name,userID,inventoryID)
-
-
-
-
-class Add_Item_Inventory1(Resource):
-    def post(self,userID,inventoryID):
-        
-        name = request.args.get('name')
-        count = request.args.get('count')
-        unit = request.args.get('unit')
-       # test.test_add_item_Inventory(userID,inventoryID,name,count,unit)
-        # Add item in db ...
-        
-        print(name,userID,inventoryID)
+        try:
+            access_token= None
+            
+            # check if Authorization header is None
+            if  request.headers.get('Authorization') is not None:
+                access_token = request.headers['Authorization'][7:]
+                
+                # if token valid then update Inventory
+                if validate_token(access_token):
+                    name_inventory = request.get_json()["name"]
+                    return(Create_db.Update_Inventory(inventoryID,userID,name_inventory))
+                else:
+                     jsonify({'access token' : "is not valid" })
+      
+        except Exception as e:
+            return jsonify({'Exception' : e })
         
         
-class Update_Item_Inventory1(Resource):
-    def put(self,userID,inventoryID,itemID):
         
-        name = request.args.get('name')
-        count = request.args.get('count')
-        unit = request.args.get('unit')
-      #  test.test_update_item_Inventory(userID,inventoryID,name,count,unit,itemID)
-        #Update item in DB..
         
-        print(name,userID,inventoryID,itemID)
-        
-class Delete_Item_Inventory1(Resource):
-    def delete(self,userID,inventoryID,itemID):
-      #  test.test_delete_item_Inventory(userID,inventoryID,itemID)
-        #Delete item in DB..
-        
-        print(userID,inventoryID,itemID)
+class Get_Inventory(Resource):
+    
+    def get(self,userID,inventoryID):
+        try:
+            access_token= None
+            
+            # check if Authorization header is None
+            if  request.headers.get('Authorization') is not None:
+                access_token = request.headers['Authorization'][7:]
+                
+                # if token valid then update Inventory
+                if validate_token(access_token):
+                    return(Create_db.Show_Spezific_Inventory(inventoryID))
+                else:
+                     jsonify({'access token' : "is not valid" })
+      
+        except Exception as e:
+            return jsonify({'Exception' : e })

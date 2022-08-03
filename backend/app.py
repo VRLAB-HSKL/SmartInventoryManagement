@@ -1,6 +1,7 @@
 from flask import Flask, jsonify
 from flask_restful import Resource, Api
 import Inventory
+import Items
 import Product
 import Login
 from sqlalchemy import create_engine
@@ -32,6 +33,8 @@ jwt = JWTManager(app)
 #--------------------------------------------------------------
 
 api = Api(app)
+
+#SqlAlchemy Database----------------------
 dotenv_path = "./development.env"
 load_dotenv(dotenv_path=dotenv_path)
 
@@ -42,11 +45,10 @@ POSTGRES_HOST=getenv("POSTGRES_HOST")
 POSTGRES_PORT=getenv("POSTGRES_PORT")
 
 db = f'postgresql+psycopg2://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_HOST}:{POSTGRES_PORT}/{DB_NAME}'
-
 engine = create_engine(db)
-
 Session = sessionmaker(db)
 New_Session = Session()
+#/*SQLDatabase--------------------------
 
 class Main(Resource):
     def get(self):
@@ -54,14 +56,6 @@ class Main(Resource):
 
     def post(self):
         print("Abfahrt")
-
-# * demo----------------------
-
-
-class Arduino_Key(Resource):
-    def get(self, num):
-        return {'result': num}
-# * --------------------------
 
 
 def create_Jwt(email):
@@ -83,23 +77,19 @@ def create_Jwt(email):
 
 def set_Resource():
     api.add_resource(Main, '/')
-    # api.add_resource(Arduino_Key, '/Arduino/<int:num>')
-
-    # api.add_resource(Inventory.New_Inventory, '/successfully_login/New_Inventory')
-    # api.add_resource(Inventory.Show_Inventory, '/successfully_login/Show_Inventory')
-    # api.add_resource(Inventory.Delete_Inventory, '/successfully_login/Delete_Inventory')
-    # api.add_resource(Inventory.Update_Inventory, '/successfully_login/Update_Inventory')
     
-    #! Die folgenden endpoints sind die neuen wie in der MArkdown besschrieben
-    api.add_resource(Inventory.New_Inventory1, '/rest/profiles/<userID>/inventories')
-    api.add_resource(Inventory.Update_Inventory1, '/rest/profiles/<int:userID>/inventories/<int:inventoryID>')
-    api.add_resource(Inventory.Delete_Inventory1, '/rest/profiles/<int:userID>/inventories/<int:inventoryID>')
-    api.add_resource(Inventory.Add_Item_Inventory1, '/rest/profiles/<int:userID>/inventories/<int:inventoryID>/items')
-    api.add_resource(Inventory.Update_Item_Inventory1, '/rest/profiles/<int:userID>/inventories/<int:inventoryID>/items/<int:itemID>')
-    api.add_resource(Inventory.Delete_Item_Inventory1, '/rest/profiles/<int:userID>/inventories/<int:inventoryID>/items/<int:itemID>')
-
+    #Inventories
+    api.add_resource(Inventory.New_Inventory, '/rest/profiles/<userID>/inventories')
+    api.add_resource(Inventory.Update_Inventory, '/rest/profiles/<int:userID>/inventories/<int:inventoryID>')
+    api.add_resource(Inventory.Delete_Inventory, '/rest/profiles/<int:userID>/inventories/<int:inventoryID>')
+    api.add_resource(Inventory.Get_Inventory, '/rest/profiles/<int:userID>/inventories/<int:inventoryID>')
+    
+    #items
+    api.add_resource(Items.Add_Item, '/rest/profiles/<int:userID>/inventories/<int:inventoryID>/items')
+    api.add_resource(Items.Update_Item, '/rest/profiles/<int:userID>/inventories/<int:inventoryID>/items/<int:itemID>')
+    api.add_resource(Items.Delete_Item, '/rest/profiles/<int:userID>/inventories/<int:inventoryID>/items/<int:itemID>')
+    # authentification
     api.add_resource(Login.signin, '/rest/sign-in')
-    #api.add_resource(Login.Logout, '/Logout')
     api.add_resource(Login.signup, '/rest/sign-up')
 
 
@@ -110,12 +100,13 @@ if __name__ == '__main__':
     #Create_db.check_Login("World","passwort123")
     
     Create_db.create_tables()
+    Create_db.show()
     
     #Create_db.Insert_Register("kim@web.de","passwort123","kim")
    # Create_db.Insert_Product("Wurst","kim@web.de","2")
    
     #Create_db.Update_Product("Milch","kevin@web.de","2")
-    Create_db.show()
+    
     #Create_db.Show_Products("kim@web.de")
     #Create_db.create_tables()
     # Create_db.insert_Register("Lukas","lukas@web.de","Passwort123")

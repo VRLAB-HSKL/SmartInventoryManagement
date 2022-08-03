@@ -1,28 +1,29 @@
-import email
 from logging import raiseExceptions
 from flask_restful import Resource
 from flask import Response, request, jsonify, abort
-import requests
 import Create_db
-from flask_jwt_extended import JWTManager, create_access_token, create_refresh_token, unset_jwt_cookies, jwt_required, set_access_cookies, set_refresh_cookies
 import app
 import os
 from hashlib import pbkdf2_hmac
+import re
 
 
 
 class signin(Resource):
     def post(self):
         try:
-            
+            #get the body Information
             email = request.get_json()["email"]
             password = request.get_json()["password"]
             
-            assert len(email)!=0
-            assert len(password)!=0
-            assert isinstance(email,str)
-            assert isinstance(password,str)
-        
+            #check email and password for validation
+            if bool(re.search(r"^[\w\.\+\-]+\@[\w]+\.[a-z]{2,3}$", email)) == False:
+                    return jsonify({"Email": "no valid email"})
+            if len(password)>256:
+                    return jsonify({"password": "password is larger then 256 charcter"})
+            if len(password)<8:
+                    return jsonify({"password": "password is smaller then 8 charcter"})
+
         except Exception:
             abort(Response("Error bei der Abfrage der Parameter in der Klasse signin"))
             
@@ -37,18 +38,20 @@ class signup(Resource):
     
     def post(self):
         try:
-            # email = request.args.get('email')
-            # password = request.args.get('password')
-            # nickname = request.args.get('nickname')
-            #print(request.data)
+            #get the body Information
             email = request.get_json()["email"]
             password = request.get_json()["password"]
             nickname = request.get_json()["nickname"]
-            assert len(email)!=0
-            #gibts die email 
-            assert len(password)<256
-            assert len(password)>8
             
+            #check email and password for validation
+            if bool(re.search(r"^[\w\.\+\-]+\@[\w]+\.[a-z]{2,3}$", email)) == False:
+                   return jsonify({"Email": "no valid email"})
+            if len(password)>256:
+                 return jsonify({"password": "password is larger then 256 charcter"})
+            if len(password)<8:
+                 return jsonify({"password": "password is smaller then 8 charcter"})
+            
+            #hash the password for db
             salt = os.urandom(32)
             password = password
             key = pbkdf2_hmac('sha256', password.encode('utf-8'), salt, 100_000).hex()
@@ -56,22 +59,11 @@ class signup(Resource):
             hashed_password = key
             
         except Exception:
-            abort(Response("Error bei der Abfrage der Parameter in der Klasse signup"))
+            abort(Response("Error password hashing in sign-up"))
             
         if Create_db.Insert_Register(email, hashed_password, nickname,salt):
             return app.create_Jwt(email)
         else:
-            return jsonify({"sign-Up": False})
+            return jsonify({"Error ": "insert Register couldnt write into db"})
         
     
-        
-        
-
-#! kann logout raus? wird doch im Frontend gemacht oder ?
-# class Logout(Resource):
-#     def get(self):
-#         try:
-#             resp = jsonify({"logout": True})
-#         except Exception:
-#             abort(Response("Error in der Klasse Logout"))
-#         return resp
